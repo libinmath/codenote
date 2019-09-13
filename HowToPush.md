@@ -1,7 +1,7 @@
 # How to push commits
 
 ```c
-$ git clone git@******************\*.git
+$ git clone git@*******************.git
 
 $ cd demo
 
