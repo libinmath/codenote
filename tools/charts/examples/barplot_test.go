@@ -1,10 +1,11 @@
-package main
+package examples
 
 import (
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
 	"math/rand"
 	"os"
+	"testing"
 )
 
 // generate random data for bar chart
@@ -16,7 +17,7 @@ func generateBarItems() []opts.BarData {
 	return items
 }
 
-func main() {
+func TestBarPlot(t *testing.T) {
 	// create a new bar instance
 	bar := charts.NewBar()
 	// set some global options like Title/Legend/ToolTip or anything else
