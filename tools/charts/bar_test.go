@@ -1,4 +1,4 @@
-package examples
+package charts
 
 import (
 	"github.com/go-echarts/go-echarts/v2/charts"
@@ -17,7 +17,7 @@ func generateBarItems() []opts.BarData {
 	return items
 }
 
-func TestBarPlot(t *testing.T) {
+func TestBar(t *testing.T) {
 	// create a new bar instance
 	bar := charts.NewBar()
 	// set some global options like Title/Legend/ToolTip or anything else
@@ -31,7 +31,7 @@ func TestBarPlot(t *testing.T) {
 		AddSeries("Category A", generateBarItems()).
 		AddSeries("Category B", generateBarItems())
 	// Where the magic happens
-	f, _ := os.Create("bar.html")
+	f, _ := os.Create("html/bar.html")
 	err := bar.Render(f)
 	if err != nil {
 		return

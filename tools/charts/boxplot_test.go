@@ -1,4 +1,4 @@
-package examples
+package charts
 
 import (
 	"io"
@@ -58,7 +58,7 @@ func TestBoxplotExamples(t *testing.T) {
 		boxPlotBase(),
 		boxPlotMulti(),
 	)
-	f, err := os.Create("boxplot.html")
+	f, err := os.Create("html/boxplot.html")
 	if err != nil {
 		panic(err)
 	}
