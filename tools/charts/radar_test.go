@@ -106,7 +106,7 @@ func radarBase() *charts.Radar {
 	radar := charts.NewRadar()
 	radar.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
-			Title: "basic radar example",
+			Title: "能力建设雷达图",
 		}),
 		charts.WithRadarComponentOpts(opts.RadarComponent{
 			Indicator: indicators,
@@ -259,11 +259,14 @@ func radarLegendSingle() *charts.Radar {
 
 func TestRadar(t *testing.T) {
 	page := components.NewPage()
+	//page.AddCharts(
+	//	radarBase(),
+	//	radarStyle(),
+	//	radarLegendMulti(),
+	//	radarLegendSingle(),
+	//)
 	page.AddCharts(
 		radarBase(),
-		radarStyle(),
-		radarLegendMulti(),
-		radarLegendSingle(),
 	)
 	f, err := os.Create("html/radar.html")
 	if err != nil {
