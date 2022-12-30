@@ -1,69 +1,75 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
-	"strings"
-
-	"github.com/PuerkitoBio/goquery"
+	"net/url"
 )
-
-type Weather struct {
-	City     string
-	Temp     string
-	Wind     string
-	Data     string
-	AirLevel string
-	Imgurl   string
-	Humidity string
-}
-
-const (
-	URL = "https://www.qweather.com/" // 旧地址是https://www.heweather.com/
-)
-
-func removeBlank(str string) string {
-	str = strings.Replace(str, " ", "", -1)
-	str = strings.Replace(str, "\n", "", -1)
-	return str
-}
-func GetWeather(url string) {
-	res, err := http.Get(url)
-	if err != nil {
-		fmt.Printf("get url err:%+v", err)
-		return
-	}
-
-	doc, err := goquery.NewDocumentFromReader(res) // TODO：need to debug
-	if err != nil {
-		fmt.Printf("NewDocumentFromReader err:%+v", err)
-		return
-	}
-	fmt.Println(doc, err)
-	now := doc.Find("div.now").Eq(0)
-
-	// row0 := now.Find(".row").Eq(0)
-	// row1 := now.Find(".row").Eq(1)
-	row2 := now.Find(".row").Eq(2)
-
-	city := now.Find(".name").Text()
-	city = removeBlank(city)
-	temp := now.Find(".tmp").Text()
-	temp = removeBlank(temp)
-	wind := row2.Find("div").Eq(0).Text()
-	wind = removeBlank(wind)
-	data := now.Find(".txt").Text()
-	data = removeBlank(data)
-	air := now.Find(".air").Text()
-	air = removeBlank(air)
-	imgurl, _ := now.Find("img").Attr("src")
-	imgurl = removeBlank(imgurl)
-	humidity := row2.Find("div").Eq(2).Text()
-	humidity = removeBlank(humidity)
-	fmt.Println(city, temp, wind, data, air, imgurl, humidity)
-
-}
 
 func main() {
-	GetWeather(URL)
+	// 接口请求URL
+	apiUrl := "https://apis.juhe.cn/simpleWeather/query"
+
+	// 初始化参数
+	param := url.Values{}
+
+	// 接口请求参数
+	param.Set("city", "北京")         // 要查询的城市名称/id，城市名称如：温州、上海、北京
+	param.Set("key", "您申请的接口调用Key") // 接口请求Key
+
+	// 发送请求
+	data, err := Get(apiUrl, param)
+	if err != nil {
+		// 请求异常，根据自身业务逻辑进行调整修改
+		_ = fmt.Errorf("请求异常:\r\n%v", err)
+	} else {
+		netReturn := make(map[string]interface{})
+		jsonerr := json.Unmarshal(data, &netReturn)
+		if jsonerr != nil {
+			// 解析JSON异常，根据自身业务逻辑进行调整修改
+			_ = fmt.Errorf("请求异常:%v", jsonerr)
+		} else {
+			errorCode := netReturn["error_code"]
+			reason := netReturn["reason"]
+			data := netReturn["result"]
+			// 当前天气信息
+			realtime := data.(map[string]interface{})["realtime"]
+
+			if errorCode.(float64) == 0 {
+				// 请求成功，根据自身业务逻辑进行调整修改
+				fmt.Printf("温度：%v\n湿度：%v\n天气：%v\n风向：%v\n风力：%v\n空气质量：%v",
+					realtime.(map[string]interface{})["temperature"],
+					realtime.(map[string]interface{})["humidity"],
+					realtime.(map[string]interface{})["info"],
+					realtime.(map[string]interface{})["direct"],
+					realtime.(map[string]interface{})["power"],
+					realtime.(map[string]interface{})["aqi"],
+				)
+			} else {
+				// 查询失败，根据自身业务逻辑进行调整修改
+				fmt.Printf("请求失败:%v_%v", errorCode.(float64), reason)
+			}
+		}
+	}
+}
+
+// get 方式发起网络请求
+func Get(apiURL string, params url.Values) (rs []byte, err error) {
+	var Url *url.URL
+	Url, err = url.Parse(apiURL)
+	if err != nil {
+		fmt.Printf("解析url错误:\r\n%v", err)
+		return nil, err
+	}
+	//如果参数中有中文参数,这个方法会进行URLEncode
+	Url.RawQuery = params.Encode()
+	resp, err := http.Get(Url.String())
+	if err != nil {
+		fmt.Println("err:", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
 }
