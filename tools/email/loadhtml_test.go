@@ -5,10 +5,11 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
+	"os"
 	"testing"
 )
 
-func TestGetLocalHtml(t *testing.T) {
+func TestGetLocalHtmlWithHttp(t *testing.T) {
 	res, err := http.Get("https://github.com/libinmath/codenote/blob/master/tools/charts/html/bar.html")
 	if err != nil {
 		log.Fatal(err)
@@ -24,4 +25,13 @@ func TestGetLocalHtml(t *testing.T) {
 	}
 	h, _ := doc.Html()
 	fmt.Printf("%+v\n", h)
+}
+
+func TestGetLocalHtmlWithOs(t *testing.T) {
+	b, err := os.ReadFile("D:\\code\\src\\codenote\\tools\\email\\bar.html")
+	if err != nil {
+		fmt.Printf("ReadFile fail, err:%+v", err)
+		return
+	}
+	fmt.Printf("%+v\n", string(b))
 }

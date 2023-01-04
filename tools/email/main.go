@@ -1,10 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"gopkg.in/gomail.v2"
-	"text/template"
+	"os"
 )
 
 func main() {
@@ -56,27 +55,10 @@ func mailBody() string {
 }
 
 func getLocalHtml() (string, error) {
-	files, err := template.ParseFiles("D:\\code\\src\\codenote\\tools\\email\\bar.html")
+	b, err := os.ReadFile("D:\\code\\src\\codenote\\tools\\email\\bar.html")
 	if err != nil {
-		fmt.Printf("ParseFiles fail, err:%+v", err)
+		fmt.Printf("ReadFile fail, err:%+v", err)
 		return "", err
 	}
-
-	var body bytes.Buffer
-
-	mimeHeaders := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-	body.Write([]byte(fmt.Sprintf("Subject: This is a test subject \n%s\n\n", mimeHeaders)))
-
-	err = files.Execute(&body, struct {
-		Name    string
-		Message string
-	}{
-		Name:    "Puneet Singh",
-		Message: "This is a test message in a HTML template",
-	})
-	if err != nil {
-		fmt.Printf("execute fail, err:%+v", err)
-		return "", err
-	}
-	return string(body.Bytes()), nil
+	return string(b), nil
 }
