@@ -9,7 +9,11 @@ import (
 
 func main() {
 	m := gomail.NewMessage()
-	d := mailConfig(m)
+	d, err := mailConfig(m)
+	if err != nil {
+		fmt.Printf("send mail fail.err :%+v\n", err)
+		return
+	}
 
 	// 发送邮件
 	if err := d.DialAndSend(m); err != nil {
@@ -25,7 +29,11 @@ const (
 	authCode   = "vrbprtlnubhpbbad"
 )
 
-func mailConfig(m *gomail.Message) *gomail.Dialer {
+func mailConfig(m *gomail.Message) (*gomail.Dialer, error) {
+	body, err := getLocalHtml()
+	if err != nil {
+		return nil, err
+	}
 	//发送人
 	m.SetHeader("From", myEmail)
 	//接收人
@@ -35,23 +43,23 @@ func mailConfig(m *gomail.Message) *gomail.Dialer {
 	//主题
 	m.SetHeader("Subject", "小佩奇的一封信")
 	//内容
-	m.SetBody("text/html", getLocalHtml())
+	m.SetBody("text/html", body)
 	//附件
 	//m.Attach("./main.go")
 
 	//拿到token，并进行连接,第4个参数是填授权码
-	return gomail.NewDialer("smtp.qq.com", 587, myEmail, authCode)
+	return gomail.NewDialer("smtp.qq.com", 587, myEmail, authCode), nil
 }
 
 func mailBody() string {
 	return "<h1>新年快乐</h1>"
 }
 
-func getLocalHtml() string {
+func getLocalHtml() (string, error) {
 	files, err := template.ParseFiles("D:\\code\\src\\codenote\\tools\\email\\bar.html")
 	if err != nil {
 		fmt.Printf("ParseFiles fail, err:%+v", err)
-		return "<h1>解析失败再接再厉</h1>"
+		return "", err
 	}
 
 	var body bytes.Buffer
@@ -68,7 +76,7 @@ func getLocalHtml() string {
 	})
 	if err != nil {
 		fmt.Printf("execute fail, err:%+v", err)
-		return "<h1>执行失败再接再厉</h1>"
+		return "", err
 	}
-	return string(body.Bytes())
+	return string(body.Bytes()), nil
 }
