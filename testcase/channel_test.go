@@ -1,22 +1,25 @@
-package main
+package testcase
+
 import (
-  "fmt"
-  "time"
+	"fmt"
+	"testing"
+	"time"
 )
+
 // goroutine not exit
 // if not stack, may main exit first
-func main() {
-  go func() {
-    i:=0
-    for {
-      time.Sleep(time.Second)
-      fmt.Printf("%d\n",i)
-      i++
-    }
-    fmt.Println("it works")
-  }()
-  
-  msgs := make(chan string)
-  <-msgs
+func TestChannel(t *testing.T) {
+	go func() {
+		i := 0
+		for {
+			time.Sleep(time.Second)
+			fmt.Printf("%d\n", i)
+			i++
+		}
+		fmt.Println("it works")
+	}()
+
+	msgs := make(chan string)
+	<-msgs
 
 }
