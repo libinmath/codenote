@@ -18,3 +18,17 @@ func main() {
 	fmt.Printf("投资%v元，投资%v年，年化收益率%.2f%%，最终投资收益：%.2f元
 ", investment, years, interestRate * 100, investmentReturn) 
 }
+// func main() {
+// 	// Get the initial stock price.
+// 	initialPrice := float64(50)
+
+// 	// Get the current stock price.
+// 	currentPrice := float64(60)
+
+// 	// Calculate the return on the stock.
+// 	returnOnStock := (currentPrice - initialPrice) / initialPrice
+
+// 	// Print the return on the stock.
+// 	fmt.Printf("The stock return is %.2f%%
+// ", math.Abs(returnOnStock)*100)
+// }
