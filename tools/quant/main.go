@@ -20,6 +20,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("预测GOOG股价为%f
-", futurePrice)
+	fmt.Printf("预测GOOG股价为%f", futurePrice)
 }
