@@ -10,6 +10,8 @@ import (
 	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
+// 建议先在bash中使用grep -r "xxxx" ./* | wc -l 命令进行词频统计，然后再生成词云。
+
 var wcData = map[string]interface{}{
 	"database":                 10000,
 	"libin":                    6181,
