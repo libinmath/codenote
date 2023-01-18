@@ -10,7 +10,45 @@ import (
 	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
-// 建议先在bash中使用grep -r "xxxx" ./* | wc -l 命令进行词频统计，然后再生成词云。
+// 建议先在bash中使用grep -ir "xxxx" ./* | wc -l 命令进行词频统计，然后再生成词云。
+
+var gs_db_key_words = map[string]interface{}{
+	"ustore":      10000,
+	"asotre":      6181,
+	"存储":          6666,
+	"openGauss":   4386,
+	"高斯":          4386,
+	"oracle":      4055,
+	"甲骨文":         4055,
+	"index":       2467,
+	"索引":          2467,
+	"undo":        2244,
+	"历史版本":        2244,
+	"uheap":       1898,
+	"ubtree":      1898,
+	"fsm":         1484,
+	"空闲空间管理":      1689,
+	"可见性":         1112,
+	"buffer":      985,
+	"缓存":          985,
+	"cache":       985,
+	"事务":          847,
+	"transaction": 847,
+	"锁":           847,
+	"lock":        847,
+	"并发":          582,
+	"元组":          555,
+	"tuple":       550,
+	"回收":          462,
+	"recycle":     366,
+	"回滚":          282,
+	"rollback":    273,
+	"redo":        265,
+	"xlog":        265,
+	"回放":          265,
+}
+
+var gs_team = map[string]interface{}{}
 
 var wcData = map[string]interface{}{
 	"database":                 10000,
@@ -50,7 +88,7 @@ func wcBase() *charts.WordCloud {
 			Title: "basic WordCloud example",
 		}))
 
-	wc.AddSeries("wordcloud", generateWCData(wcData)).
+	wc.AddSeries("wordcloud", generateWCData(gs_db_key_words)).
 		SetSeriesOptions(
 			charts.WithWorldCloudChartOpts(
 				opts.WordCloudChart{
@@ -60,7 +98,7 @@ func wcBase() *charts.WordCloud {
 	return wc
 }
 
-func wcCardioid() *charts.WordCloud {
+func wcRect() *charts.WordCloud {
 	wc := charts.NewWordCloud()
 	wc.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{Title: "cardioid shape"}),
@@ -71,7 +109,7 @@ func wcCardioid() *charts.WordCloud {
 			charts.WithWorldCloudChartOpts(
 				opts.WordCloudChart{
 					SizeRange: []float32{14, 80},
-					Shape:     "cardioid",
+					Shape:     "rect",
 				}),
 		)
 	return wc
@@ -99,7 +137,7 @@ func TestWordCloud(t *testing.T) {
 	page := components.NewPage()
 	page.AddCharts(
 		wcBase(),
-		wcCardioid(),
+		wcRect(),
 		wcStar(),
 	)
 
