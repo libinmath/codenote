@@ -1,5 +1,3 @@
-// Copyright (c) Huawei Technologies Co., Ltd. 2012-2021. All rights reserved.
-
 // plot
 package plot
 
@@ -66,7 +64,7 @@ func BarExample() {
 
 	bar.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
-			Title:    "融合引擎团队知识贡献",
+			Title:    "团队知识贡献",
 			Subtitle: "wiki仓提交数统计",
 			Left:     "middle",
 		}),
