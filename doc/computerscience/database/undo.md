@@ -2,3 +2,7 @@
 
 一分钟理解redo和undo
 https://www.51cto.com/article/580122.html
+
+
+
+Main Memory Database Recovery Strategies
