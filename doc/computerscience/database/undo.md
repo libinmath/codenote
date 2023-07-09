@@ -4,5 +4,9 @@
 https://www.51cto.com/article/580122.html
 
 
-
+Managing Non-Volatile Memory in Database Systems
 Main Memory Database Recovery Strategies
+论文选题：讲undo
+涵盖mysql innodb的undo log  https://www.modb.pro/db/656707
+zheap的undo
+以及oracle的undo
